@@ -112,18 +112,45 @@ Goto ECR repository page and create repository with the name : springdemo
 
 5. Import the project and commit it
 
-Goto Projects in GitLab and do import project and specify the below git url to import repo.
+Goto Projects in GitLab and do import project (from github)and specify the below git url to import repo.
 
 ![image](https://user-images.githubusercontent.com/84037413/117861672-967d7480-b289-11eb-9b69-e3778df5f29a.png)
 
-[Springoot]{https://github.com/tushardashpute/springboot.git}
+![image](https://user-images.githubusercontent.com/84037413/117862268-62568380-b28a-11eb-83f9-61da7e634efd.png)
+
+![image](https://user-images.githubusercontent.com/84037413/117862384-80bc7f00-b28a-11eb-97c9-bc650296d65c.png)
+
+Github Personal Token
+
+![image](https://user-images.githubusercontent.com/84037413/117863325-8cf50c00-b28b-11eb-93fb-bc04bef7acc8.png)
+
+	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
+
+Provide that token in Gitlab:
+
+![image](https://user-images.githubusercontent.com/84037413/117863595-d9404c00-b28b-11eb-9617-0655620f7eb4.png)
+
+![image](https://user-images.githubusercontent.com/84037413/117863677-f248fd00-b28b-11eb-97a6-94da0b533f1e.png)
+
+
+[Springoot](https://github.com/logambigaik/springboo-without-db.git)
+ 
+ 
+
  
 Now goto CI/CD  Variables  and add the following AWS variables to access the password of ECR and login to it.
+
+![image](https://user-images.githubusercontent.com/84037413/117864841-2670ed80-b28d-11eb-8f08-cbd82d4be1ff.png)
+
+
+
  Variable			Allowed Values
 AWS_ACCESS_KEY_ID		Any(access_key_id)
-AWS_DEFAULT_REGION		Any(us-east-1)
+AWS_DEFAULT_REGION		Any(eu-west-2)
 AWS_SECRET_ACCESS_KEY		Any(access_key)
  
+ ![image](https://user-images.githubusercontent.com/84037413/117865170-8e273880-b28d-11eb-92ac-5f352e94ebcc.png)
+
 
 Once repo is imported, edit the file .gitlab-ci.yml update the DOCKER_REGISTRY: with your ECR repo url and commit it. Once you commit the repo it will auto trigger the pipeline.
 					Or 
@@ -131,6 +158,8 @@ If you want you can goto projects  CI/CD  pipeline  run project.
  
 You can see the stages and status as below :
  
+![image](https://user-images.githubusercontent.com/84037413/117865555-fc6bfb00-b28d-11eb-927d-f650e5e662a8.png)
+
 
 Once pipeline is finished you can verify if image is pushed to your ECR repo or not.
 
