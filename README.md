@@ -8,6 +8,7 @@ Below are the high-level steps:
 3.	Register GitLab-runner using token
 4.	Create ECR repository
 5.	Import the project and run pipeline
+6.	Run the container for checking the the docker image 
 
 
 # 1.Install GitLab server: 
@@ -81,7 +82,8 @@ Copy token and url
 ![image](https://user-images.githubusercontent.com/84037413/117860641-6f727300-b288-11eb-8e29-1c440a02c73e.png)
 
 
-There are multiple types of runner executer like shell, docker, k8s. For our use case we will use docker executor. 
+#There are multiple types of runner executer like shell, docker, k8s. For our use case we will use docker executor. 
+
 First install Docker on the server where we are running GitLab Runner.
 # yum install docker -y
 # service docker start
@@ -95,7 +97,7 @@ sudo gitlab-runner register -n \
         --docker-image "docker:stable" \
 	--docker-privileged
 ```
-You can get the list of registered runners:
+#You can get the list of registered runners:
 
 # gitlab-runner list
 
@@ -105,14 +107,14 @@ You can get the list of registered runners:
 ![image](https://user-images.githubusercontent.com/84037413/117861314-34247400-b289-11eb-8b92-d3d4b773536e.png) 
 
 # 4.Create ECR repository
-Goto ECR repository page and create repository with the name : springdemo
+#Goto ECR repository page and create repository with the name : springdemo
 
 ![image](https://user-images.githubusercontent.com/84037413/117861914-e52b0e80-b289-11eb-9429-955a07681717.png)
 
 
 # 5. Import the project and commit it
 
-Goto Projects in GitLab and do import project (from github)and specify the below git url to import repo.
+#Goto Projects in GitLab and do import project (from github)and specify the below git url to import repo.
 
 ![image](https://user-images.githubusercontent.com/84037413/117861672-967d7480-b289-11eb-9b69-e3778df5f29a.png)
 
@@ -120,62 +122,66 @@ Goto Projects in GitLab and do import project (from github)and specify the below
 
 ![image](https://user-images.githubusercontent.com/84037413/117862384-80bc7f00-b28a-11eb-97c9-bc650296d65c.png)
 
-Github Personal Token
+#Github Personal Token
 
 ![image](https://user-images.githubusercontent.com/84037413/117863325-8cf50c00-b28b-11eb-93fb-bc04bef7acc8.png)
 
 	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
 
-Provide that token in Gitlab:
+#Provide that token in Gitlab:
 
 ![image](https://user-images.githubusercontent.com/84037413/117863595-d9404c00-b28b-11eb-9617-0655620f7eb4.png)
 
 ![image](https://user-images.githubusercontent.com/84037413/117863677-f248fd00-b28b-11eb-97a6-94da0b533f1e.png)
 
-
+# Link for git repo
 [Springoot](https://github.com/logambigaik/springboo-without-db.git)
  
  
 
  
-Now goto CI/CD  Variables  and add the following AWS variables to access the password of ECR and login to it.
+#Now goto CI/CD  Variables  and add the following AWS variables to access the password of ECR and login to it.
 
 ![image](https://user-images.githubusercontent.com/84037413/117864841-2670ed80-b28d-11eb-8f08-cbd82d4be1ff.png)
 
-
+```
 
  Variable			Allowed Values
 AWS_ACCESS_KEY_ID		Any(access_key_id)
 AWS_DEFAULT_REGION		Any(eu-west-2)
 AWS_SECRET_ACCESS_KEY		Any(access_key)
+```
  
- ![image](https://user-images.githubusercontent.com/84037413/117865170-8e273880-b28d-11eb-92ac-5f352e94ebcc.png)
+![image](https://user-images.githubusercontent.com/84037413/117865170-8e273880-b28d-11eb-92ac-5f352e94ebcc.png)
 
 
-Once repo is imported, edit the file .gitlab-ci.yml update the DOCKER_REGISTRY: with your ECR repo url and commit it. Once you commit the repo it will auto trigger the pipeline.
+#Once repo is imported, edit the file .gitlab-ci.yml update the DOCKER_REGISTRY: with your ECR repo url and commit it. Once you commit the repo it will auto trigger the pipeline.
 					Or 
-If you want you can goto projects  CI/CD  pipeline  run project. 
+#If you want you can goto projects  CI/CD  pipeline  run project. 
 
 
 ![image](https://user-images.githubusercontent.com/84037413/117867310-1a3a5f80-b290-11eb-83a2-453f097dd75e.png)
 
-You can see the stages and status as below :
+#You can see the stages and status as below :
  
 ![image](https://user-images.githubusercontent.com/84037413/117865555-fc6bfb00-b28d-11eb-927d-f650e5e662a8.png)
 
 
-Once pipeline is finished you can verify if image is pushed to your ECR repo or not.
+#Once pipeline is finished you can verify if image is pushed to your ECR repo or not.
 
-![image](https://user-images.githubusercontent.com/84037413/117879357-c8e59c80-b29e-11eb-82b2-ec64c6170ec4.png)
+![image](https://user-images.githubusercontent.com/84037413/117880886-845b0080-b2a0-11eb-9570-95aa229d4dfc.png)
+
 
  
-To verify if image is created correctly or not, we can pull the image run the docker container using below command:
+#To verify if image is created correctly or not, we can pull the image run the docker container using below command:
 
 # 6  aws configure
+```
 AWS Access Key ID [None]: AKIAT6DSXXXXXXXXXXX
 AWS Secret Access Key [None]: 5raxCB4Ymy8MXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Default region name [None]: us-east-1
 Default output format [None]: json
+```
 
 [root@ip-172-31-67-134 opt]# aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo
 
@@ -191,6 +197,7 @@ Default output format [None]: json
 
 ![image](https://user-images.githubusercontent.com/84037413/117879904-650fa380-b29f-11eb-9e2c-52948c54a4a2.png)
 
+```
 [root@ip-172-31-9-241 opt]# docker pull 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
 10: Pulling from springdemo
 050382585609: Pull complete
@@ -199,10 +206,11 @@ a8c71082b2bb: Pull complete
 Digest: sha256:2d41b5160094d46d97b39ba8c8432f176970440702dc0369b75a7d73444cdc7c
 Status: Downloaded newer image for 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
-
+```
 
 
 # docker ps
+```
 [root@ip-172-31-9-241 opt]# docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 [root@ip-172-31-9-241 opt]# docker images
@@ -213,7 +221,7 @@ docker                                                    19-dind           c027
 docker                                                    dind              dc8c389414c8   10 days ago     263MB
 maven                                                     3-jdk-8           87963037f00b   2 weeks ago     525MB
 docker                                                    latest            d2979b152a7d   3 weeks ago     246MB
-
+```
 
 # docker run -it -p 8081:33333 -d 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
 
@@ -223,7 +231,7 @@ docker                                                    latest            d297
 ![image](https://user-images.githubusercontent.com/84037413/117880356-ec5d1700-b29f-11eb-90c0-8a4d2dac0fef.png)
 
 
-Open port 8081 and access the http://18.132.245.177:8081/listallcustomers url to check if image working properly or not.
+#Open port 8081 and access the http://18.132.245.177:8081/listallcustomers url to check if image working properly or not.
 
 ![image](https://user-images.githubusercontent.com/84037413/117880496-17e00180-b2a0-11eb-8eb1-b6d6777f032c.png)
  
