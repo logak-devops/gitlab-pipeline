@@ -86,15 +86,15 @@ First install Docker on the server where we are running GitLab Runner.
 # yum install docker -y
 # service docker start
 # chmod 666 /var/run/docker.sock
-
+```
 sudo gitlab-runner register -n \
     	--url http://18.132.245.177/ \
     	--registration-token aAVz4RPWXd5aXZ2UgCMX \
-   	 --executor docker \
+   	--executor docker \
     	--description "My Docker Runner" \
---docker-image "docker:stable" \
+        --docker-image "docker:stable" \
 	--docker-privileged
-
+```
 You can get the list of registered runners:
 
 # gitlab-runner list
