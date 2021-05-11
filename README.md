@@ -37,32 +37,49 @@ Open the port number 80 as gitlab is running on port 80.
 
 Check the GitLab UI from browser:
 
-http://public_ip_of_ec2_instance or  http://34.239.158.168
+http://public_ip_of_ec2_instance or  http://18.132.245.177
+
 To access the GitLab web portal that will ask you to set the username and password of root. Enter the new root password. After verifying then, click the ‘Change your password’ option.
 
 Now, login with the username as root and then provide the password. You will see the following gitlab dashboard screen on your system.
 
+
+![image](https://user-images.githubusercontent.com/84037413/117859012-654f7500-b286-11eb-9fc2-0e8a35bc6ad5.png)
+
+![image](https://user-images.githubusercontent.com/84037413/117859768-54533380-b287-11eb-88ad-6058dc0ad47e.png)
+
  
 # 2.Install GitLab-runner
+
 https://docs.gitlab.com/runner/install/linux-repository.html#installing-the-runner
 
 -	Add GitLab official repository:
+
 curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
 
 -	Install the latest version of GitLab Runner, or skip to the next step to install a specific version:
+-	
 export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
+
 -	To install a specific version of GitLab Runner:
+-	
 
 yum list gitlab-runner --showduplicates | sort -r
 export GITLAB_RUNNER_DISABLE_SKEL=true;sudo -E yum install gitlab-runner-10.0.0-1
  
+
 # 3. Register runner
+
 For registering the runner, we need to get token from GitLab server first.
 To get the token go to projects -> select project -> settings -> CI/CD Runners 
 
- 
+![image](https://user-images.githubusercontent.com/84037413/117860410-2b7f6e00-b288-11eb-9db8-eb41609e56d5.png)
+
+
 Copy token and url
- 
+
+![image](https://user-images.githubusercontent.com/84037413/117860641-6f727300-b288-11eb-8e29-1c440a02c73e.png)
+
 
 There are multiple types of runner executer like shell, docker, k8s. For our use case we will use docker executor. 
 First install Docker on the server where we are running GitLab Runner.
@@ -71,28 +88,35 @@ First install Docker on the server where we are running GitLab Runner.
 # chmod 666 /var/run/docker.sock
 
 sudo gitlab-runner register -n \
-    	--url http://34.239.158.168/ \
-    	--registration-token gv5xx773yhrYomS9MyY_ \
+    	--url http://18.132.245.177/ \
+    	--registration-token aAVz4RPWXd5aXZ2UgCMX \
    	 --executor docker \
     	--description "My Docker Runner" \
 --docker-image "docker:stable" \
 	--docker-privileged
 
-
 You can get the list of registered runners:
 
 # gitlab-runner list
-Runtime platform                                    arch=amd64 os=linux pid=10131 revision=7f7a4bb0 version=13.11.0
-Listing configured runners                          ConfigFile=/etc/gitlab-runner/config.toml
-My Docker Runner                                    Executor=docker Token=3FHx9et1jSzGpoCThz4Y URL=http://34.239.158.168/
 
- 
+
+![image](https://user-images.githubusercontent.com/84037413/117861190-0fc89780-b289-11eb-99b8-697a1d819042.png)
+
+![image](https://user-images.githubusercontent.com/84037413/117861314-34247400-b289-11eb-8b92-d3d4b773536e.png) 
 
 # 4.Create ECR repository
 Goto ECR repository page and create repository with the name : springdemo
+
+![image](https://user-images.githubusercontent.com/84037413/117861914-e52b0e80-b289-11eb-9429-955a07681717.png)
+
+
 5. Import the project and commit it
+
 Goto Projects in GitLab and do import project and specify the below git url to import repo.
-https://github.com/tushardashpute/springboot.git
+
+![image](https://user-images.githubusercontent.com/84037413/117861672-967d7480-b289-11eb-9b69-e3778df5f29a.png)
+
+[Springoot]{https://github.com/tushardashpute/springboot.git}
  
 Now goto CI/CD  Variables  and add the following AWS variables to access the password of ECR and login to it.
  Variable			Allowed Values
@@ -109,6 +133,7 @@ You can see the stages and status as below :
  
 
 Once pipeline is finished you can verify if image is pushed to your ECR repo or not.
+
 
  
 To verify if image is created correctly or not, we can pull the image run the docker container using below command:
