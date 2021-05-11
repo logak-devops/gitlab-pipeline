@@ -89,9 +89,9 @@ First install Docker on the server where we are running GitLab Runner.
 ```
 sudo gitlab-runner register -n \
     	--url http://18.132.245.177/ \
-    	--registration-token aAVz4RPWXd5aXZ2UgCMX \
+    	--registration-token wy79Ym3d37mLD6ckApZY \
    	--executor docker \
-    	--description "My Docker Runner" \
+    	--description "My Docker Runner1" \
         --docker-image "docker:stable" \
 	--docker-privileged
 ```
