@@ -110,7 +110,7 @@ Goto ECR repository page and create repository with the name : springdemo
 ![image](https://user-images.githubusercontent.com/84037413/117861914-e52b0e80-b289-11eb-9429-955a07681717.png)
 
 
-5. Import the project and commit it
+# 5. Import the project and commit it
 
 Goto Projects in GitLab and do import project (from github)and specify the below git url to import repo.
 
@@ -155,7 +155,10 @@ AWS_SECRET_ACCESS_KEY		Any(access_key)
 Once repo is imported, edit the file .gitlab-ci.yml update the DOCKER_REGISTRY: with your ECR repo url and commit it. Once you commit the repo it will auto trigger the pipeline.
 					Or 
 If you want you can goto projects  CI/CD  pipeline  run project. 
- 
+
+
+![image](https://user-images.githubusercontent.com/84037413/117867310-1a3a5f80-b290-11eb-83a2-453f097dd75e.png)
+
 You can see the stages and status as below :
  
 ![image](https://user-images.githubusercontent.com/84037413/117865555-fc6bfb00-b28d-11eb-927d-f650e5e662a8.png)
@@ -163,44 +166,65 @@ You can see the stages and status as below :
 
 Once pipeline is finished you can verify if image is pushed to your ECR repo or not.
 
+![image](https://user-images.githubusercontent.com/84037413/117879357-c8e59c80-b29e-11eb-82b2-ec64c6170ec4.png)
 
  
 To verify if image is created correctly or not, we can pull the image run the docker container using below command:
 
-# aws configure
+# 6  aws configure
 AWS Access Key ID [None]: AKIAT6DSXXXXXXXXXXX
 AWS Secret Access Key [None]: 5raxCB4Ymy8MXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Default region name [None]: us-east-1
 Default output format [None]: json
 
-[root@ip-172-31-67-134 opt]# aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 270823544663.dkr.ecr.us-east-1.amazonaws.com
-Login Succeeded
-# docker pull 270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo:7
-7: Pulling from springdemo
+[root@ip-172-31-67-134 opt]# aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo
+
+![image](https://user-images.githubusercontent.com/84037413/117877709-caae6080-b29c-11eb-85e7-7bc29b28d713.png)
+
+![image](https://user-images.githubusercontent.com/84037413/117879796-45787b00-b29f-11eb-8005-e557be8318ae.png)
+
+
+
+# 7: Pulling from springdemo
+
+	docker pull 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
+
+![image](https://user-images.githubusercontent.com/84037413/117879904-650fa380-b29f-11eb-9e2c-52948c54a4a2.png)
+
+[root@ip-172-31-9-241 opt]# docker pull 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
+10: Pulling from springdemo
 050382585609: Pull complete
 a8c71082b2bb: Pull complete
-abfe0cbfb3f2: Pull complete
-Digest: sha256:f453b69aa9e4dcff39ccc1997841f5de02b7510bf458968cb89b6f457cb2da5b
-Status: Downloaded newer image for 270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo:7
-270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo:7
+4180c4b68a4e: Pull complete
+Digest: sha256:2d41b5160094d46d97b39ba8c8432f176970440702dc0369b75a7d73444cdc7c
+Status: Downloaded newer image for 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
+136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
+
+
 
 # docker ps
+[root@ip-172-31-9-241 opt]# docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-[root@ip-172-31-67-134 opt]# docker images
-REPOSITORY                                                TAG               IMAGE ID       CREATED          SIZE
-270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo   7                 8689dfdd73ac   4 minutes ago    354MB
-gitlab/gitlab-runner-helper                               x86_64-7f7a4bb0   7ce33577de1e   19 minutes ago   70.2MB
-docker                                                    19-dind           c0272ea5b8a2   7 days ago       236MB
-docker                                                    dind              dc8c389414c8   7 days ago       263MB
-maven                                                     3-jdk-8           87963037f00b   2 weeks ago      525MB
-docker                                                    latest            d2979b152a7d   3 weeks ago      246MB
+[root@ip-172-31-9-241 opt]# docker images
+REPOSITORY                                                TAG               IMAGE ID       CREATED         SIZE
+136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo   10                e86b8fe24a03   8 minutes ago   354MB
+gitlab/gitlab-runner-helper                               x86_64-7f7a4bb0   4763454e021f   2 hours ago     70.2MB
+docker                                                    19-dind           c0272ea5b8a2   10 days ago     236MB
+docker                                                    dind              dc8c389414c8   10 days ago     263MB
+maven                                                     3-jdk-8           87963037f00b   2 weeks ago     525MB
+docker                                                    latest            d2979b152a7d   3 weeks ago     246MB
 
-# docker run -it -p 8081:33333 -d 270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo:7
-2986bf922257a1ccada7e20fba25054374b11f6ac13db837edada9fbd89dde8f
+
+# docker run -it -p 8081:33333 -d 136962450893.dkr.ecr.eu-west-2.amazonaws.com/springdemo:10
+
+
 # docker ps
-CONTAINER ID   IMAGE                                                       COMMAND                  CREATED         STATUS         PORTS                  NAMES
-33aec25f8298   270823544663.dkr.ecr.us-east-1.amazonaws.com/springdemo:7   "java -jar /springbo…"   7 minutes ago   Up 7 minutes   0.0.0.0:8081->33333/tcp   gifted_golick
 
-Open port 8081 and access the http://ip-address:8081/listallcustomers url to check if image working properly or not.
+![image](https://user-images.githubusercontent.com/84037413/117880356-ec5d1700-b29f-11eb-90c0-8a4d2dac0fef.png)
+
+
+Open port 8081 and access the http://18.132.245.177:8081/listallcustomers url to check if image working properly or not.
+
+![image](https://user-images.githubusercontent.com/84037413/117880496-17e00180-b2a0-11eb-8eb1-b6d6777f032c.png)
  
  
