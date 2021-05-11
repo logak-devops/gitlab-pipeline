@@ -8,7 +8,9 @@ Below are the high-level steps:
 3.	Register GitLab-runner using token
 4.	Create ECR repository
 5.	Import the project and run pipeline
-1.Install GitLab server: 
+
+
+# 1.Install GitLab server: 
 I am using the Amazon Linux Instance, but depending on your OS flavor you can choose the repo from below website:
 https://packages.gitlab.com/gitlab/gitlab-ce
 
@@ -41,7 +43,7 @@ To access the GitLab web portal that will ask you to set the username and passwo
 Now, login with the username as root and then provide the password. You will see the following gitlab dashboard screen on your system.
 
  
-2.Install GitLab-runner
+# 2.Install GitLab-runner
 https://docs.gitlab.com/runner/install/linux-repository.html#installing-the-runner
 
 -	Add GitLab official repository:
@@ -54,7 +56,7 @@ export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
 yum list gitlab-runner --showduplicates | sort -r
 export GITLAB_RUNNER_DISABLE_SKEL=true;sudo -E yum install gitlab-runner-10.0.0-1
  
-3. Register runner
+# 3. Register runner
 For registering the runner, we need to get token from GitLab server first.
 To get the token go to projects -> select project -> settings -> CI/CD Runners 
 
@@ -86,7 +88,7 @@ My Docker Runner                                    Executor=docker Token=3FHx9e
 
  
 
-4.Create ECR repository
+# 4.Create ECR repository
 Goto ECR repository page and create repository with the name : springdemo
 5. Import the project and commit it
 Goto Projects in GitLab and do import project and specify the below git url to import repo.
@@ -110,6 +112,7 @@ Once pipeline is finished you can verify if image is pushed to your ECR repo or 
 
  
 To verify if image is created correctly or not, we can pull the image run the docker container using below command:
+
 # aws configure
 AWS Access Key ID [None]: AKIAT6DSXXXXXXXXXXX
 AWS Secret Access Key [None]: 5raxCB4Ymy8MXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
