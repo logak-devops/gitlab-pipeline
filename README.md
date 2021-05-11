@@ -1,15 +1,16 @@
 # gitlab-pipeline
 
 
-Gitlab server, GitLab runner setup and maven CI pipeline to push the docker image to ECR 
-Below are the high-level steps:
+#Gitlab server, GitLab runner setup and maven CI pipeline to push the docker image to ECR 
+#Below are the high-level steps:
+```
 1.	Install GitLab server
 2.	Install GitLab-runner
 3.	Register GitLab-runner using token
 4.	Create ECR repository
 5.	Import the project and run pipeline
 6.	Run the container for checking the the docker image 
-
+```
 
 # 1.Install GitLab server: 
 I am using the Amazon Linux Instance, but depending on your OS flavor you can choose the repo from below website:
