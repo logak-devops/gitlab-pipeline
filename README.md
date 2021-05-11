@@ -13,37 +13,48 @@
 ```
 
 # 1.Install GitLab server: 
-I am using the Amazon Linux Instance, but depending on your OS flavor you can choose the repo from below website:
+
+## With Amazon Linux Instance, but depending on your OS flavor you can choose the repo from below website: 
 https://packages.gitlab.com/gitlab/gitlab-ce
 
-Install the required dependencies :
+## Install the required dependencies :
 
-yum install curl policycoreutils-python openssh-server  -y
+```yum install curl policycoreutils-python openssh-server  -y```
 
-Download git repo and install it :
+## Download git repo and install it :
 
+```
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
 EXTERNAL_URL="`curl http://169.254.169.254/latest/meta-data/public-ipv4`" yum install -y gitlab-ce
+```
 
-Note : 
+Note :
+====
+```
 Once you installed the GitLab package, you can execute the required configuration utility. This file provides automatic configurations, and you can modify it according to your need. Run the following edit of the GitLab configuration file.
 
 $ sudo vim /etc/gitlab/gitlab.rb
 
-Now, edit the configuration file to change hostname using external_url variable so that, you can access them from other remote machine using the specified hostname and other parameters:
-Run the following command to reconfigure the services of GitLab:
+```
 
+
+##Now, edit the configuration file to change hostname using external_url variable so that, you can access them from other remote machine using the specified hostname and other parameters:
+
+## Run the following command to reconfigure the services of GitLab:
+
+```
 $ sudo gitlab-ctl reconfigure
+```
 
-Open the port number 80 as gitlab is running on port 80.
+## Open the port number 80 as gitlab is running on port 80.
 
-Check the GitLab UI from browser:
+>> Check the GitLab UI from browser:
 
-http://public_ip_of_ec2_instance or  http://18.132.245.177
+``` http://public_ip_of_ec2_instance or  http://18.132.245.177 ```
 
-To access the GitLab web portal that will ask you to set the username and password of root. Enter the new root password. After verifying then, click the ‘Change your password’ option.
+##To access the GitLab web portal that will ask you to set the username and password of root. Enter the new root password. After verifying then, click the ‘Change your password’ option.
 
-Now, login with the username as root and then provide the password. You will see the following gitlab dashboard screen on your system.
+##Now, login with the username as root and then provide the password. You will see the following gitlab dashboard screen on your system.
 
 
 ![image](https://user-images.githubusercontent.com/84037413/117859012-654f7500-b286-11eb-9fc2-0e8a35bc6ad5.png)
@@ -53,42 +64,43 @@ Now, login with the username as root and then provide the password. You will see
  
 # 2.Install GitLab-runner
 
-https://docs.gitlab.com/runner/install/linux-repository.html#installing-the-runner
+	``` https://docs.gitlab.com/runner/install/linux-repository.html#installing-the-runner ```
 
--	Add GitLab official repository:
+	- Add GitLab official repository:
 
-curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+	```curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash ```
 
--	Install the latest version of GitLab Runner, or skip to the next step to install a specific version:
--	
-export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
+	- Install the latest version of GitLab Runner, or skip to the next step to install a specific version:
 
--	To install a specific version of GitLab Runner:
--	
+	``` export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner ```
 
-yum list gitlab-runner --showduplicates | sort -r
-export GITLAB_RUNNER_DISABLE_SKEL=true;sudo -E yum install gitlab-runner-10.0.0-1
- 
+	-	To install a specific version of GitLab Runner:
+	-	
+
+	```
+	yum list gitlab-runner --showduplicates | sort -r
+	export GITLAB_RUNNER_DISABLE_SKEL=true;sudo -E yum install gitlab-runner-10.0.0-1
+ 	```
 
 # 3. Register runner
 
-For registering the runner, we need to get token from GitLab server first.
-To get the token go to projects -> select project -> settings -> CI/CD Runners 
+##For registering the runner, we need to get token from GitLab server first.
+## To get the token go to projects -> select project -> settings -> CI/CD Runners 
 
 ![image](https://user-images.githubusercontent.com/84037413/117860410-2b7f6e00-b288-11eb-9db8-eb41609e56d5.png)
 
 
-Copy token and url
+##Copy token and url
 
 ![image](https://user-images.githubusercontent.com/84037413/117860641-6f727300-b288-11eb-8e29-1c440a02c73e.png)
 
 
 #There are multiple types of runner executer like shell, docker, k8s. For our use case we will use docker executor. 
 
-First install Docker on the server where we are running GitLab Runner.
-# yum install docker -y
-# service docker start
-# chmod 666 /var/run/docker.sock
+##First install Docker on the server where we are running GitLab Runner.
+		yum install docker -y
+		service docker start
+		chmod 666 /var/run/docker.sock
 ```
 sudo gitlab-runner register -n \
     	--url http://18.132.245.177/ \
@@ -98,7 +110,7 @@ sudo gitlab-runner register -n \
         --docker-image "docker:stable" \
 	--docker-privileged
 ```
-#You can get the list of registered runners:
+# You can get the list of registered runners:
 
 # gitlab-runner list
 
